@@ -1,6 +1,22 @@
 name: Build Container and Push to GitHub Container Registry
 
 on:
+
+  workflow_call:
+    secrets:
+      credentials:
+        required: true
+    inputs:
+      os:
+        description: 'Debian, Ubuntu or Alpine'
+        required: true
+        default: 'alpine'
+        type: string
+      version:
+        description: 'Version of the OS'
+        required: true
+        default: 'latest'
+        type: string
   workflow_dispatch:
     inputs:
       os:
