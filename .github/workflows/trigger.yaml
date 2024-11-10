@@ -1,0 +1,62 @@
+name: Build Container and Push to GitHub Container Registry
+
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - '*'
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - 'LICENSE'
+  pull_request:
+    branches:
+      - 'main'
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - 'LICENSE'
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  debian:
+    strategy:
+      matrix:
+        version:
+          - "latest"
+          - "bookworm"
+        os:
+          - debian
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ matrix.version }}
+      os: ${{ matrix.os }}
+
+  ubuntu:
+    strategy:
+      matrix:
+        version:
+          - "latest"
+          - "24.04"
+        os:
+          - ubunutu
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ matrix.version }}
+      os: ${{ matrix.os }}
+
+  alpine:
+    strategy:
+      matrix:
+        version:
+          - "latest"
+          - "3.14"
+        os:
+          - alpine
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ matrix.version }}
+      os: ${{ matrix.os }}

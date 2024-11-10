@@ -1,25 +1,22 @@
 name: Build Container and Push to GitHub Container Registry
 
 on:
-  push:
-    branches:
-      - 'main'
-    tags:
-      - '*'
-    paths-ignore:
-      - '**.md'
-      - '.github/**'
-      - 'LICENSE'
-  pull_request:
-    branches:
-      - 'main'
-    paths-ignore:
-      - '**.md'
-      - '.github/**'
-      - 'LICENSE'
-  schedule:
-    - cron: "0 0 * * *"
   workflow_dispatch:
+    inputs:
+      os:
+        description: 'Debian, Ubuntu or Alpine'
+        required: true
+        default: 'alpine'
+        type: choice
+        options:
+        - debian
+        - ubuntu
+        - alpine
+      version:
+        description: 'Version of the OS'
+        required: true
+        default: 'latest'
+        type: string
 
 jobs:
   build:
@@ -43,13 +40,14 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: Dockerfile-${{ inputs.os }}
           file: Dockerfile
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
-            ghcr.io/buildsociety/${{ github.event.repository.name }}:latest
-            ghcr.io/buildsociety/${{ github.event.repository.name }}:${{ github.sha }}
+            ghcr.io/buildsociety/${{ github.event.repository.name }}:${{ inputs.os }}
+            ghcr.io/buildsociety/${{ github.event.repository.name }}:${{ inputs.os }}-${{ inputs.version }}
+            ghcr.io/buildsociety/${{ github.event.repository.name }}-${{ inputs.os }}:${{ inputs.version }}
           annotations: |
             org.opencontainers.image.title=${{ github.repository }}
             org.opencontainers.image.description=A container from Build Society - ${{ github.repository }}
