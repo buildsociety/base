@@ -53,8 +53,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: Dockerfile-${{ inputs.os }}
-          file: Dockerfile
+          context: .
+          file: Dockerfile-${{ inputs.os }}
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
           tags: |
@@ -62,11 +62,10 @@ jobs:
             ghcr.io/buildsociety/${{ github.event.repository.name }}:${{ inputs.os }}-${{ inputs.version }}
             ghcr.io/buildsociety/${{ github.event.repository.name }}-${{ inputs.os }}:${{ inputs.version }}
           annotations: |
-            org.opencontainers.image.title=${{ github.repository }}
-            org.opencontainers.image.description=A container from Build Society - ${{ github.repository }}
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
+            org.opencontainers.image.title="${{ github.repository }}"
+            org.opencontainers.image.description="A container from Build Society - ${{ github.repository }}"
+            org.opencontainers.image.source="${{ github.server_url }}/${{ github.repository }}"
+            org.opencontainers.image.revision="${{ github.sha }}"
           no-cache: true
           provenance: true
           sbom: true
