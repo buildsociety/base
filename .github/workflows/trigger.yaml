@@ -22,20 +22,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  debian:
-    strategy:
-      fail-fast: false
-      matrix:
-        version:
-          - "latest"
-          - "bookworm"
-        os:
-          - debian
-    uses: ./.github/workflows/build.yaml
-    with:
-      version: ${{ matrix.version }}
-      os: ${{ matrix.os }}
-
   ubuntu:
     strategy:
       fail-fast: false
