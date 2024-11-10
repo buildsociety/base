@@ -30,7 +30,7 @@ jobs:
           - "latest"
           - "24.04"
         os:
-          - ubunutu
+          - ubuntu
     uses: ./.github/workflows/build.yaml
     with:
       version: ${{ matrix.version }}
