@@ -24,6 +24,7 @@ on:
 jobs:
   debian:
     strategy:
+      fail-fast: false
       matrix:
         version:
           - "latest"
@@ -37,6 +38,7 @@ jobs:
 
   ubuntu:
     strategy:
+      fail-fast: false
       matrix:
         version:
           - "latest"
@@ -50,6 +52,7 @@ jobs:
 
   alpine:
     strategy:
+      fail-fast: false
       matrix:
         version:
           - "latest"
