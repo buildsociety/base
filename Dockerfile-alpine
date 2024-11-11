@@ -3,6 +3,6 @@ ARG DISTRO_VERSION=latest
 FROM alpine:${DISTRO_VERSION}
 RUN apk upgrade --no-cache \
     && mkdir -p /workspace/ \
-    && addgroup -S buildsociety \
-    && adduser -S buildsociety -G buildsociety \
+    && addgroup -S buildsociety -g 1000 \
+    && adduser -S buildsociety -G buildsociety -g 1000 \
     && chown -R buildsociety:buildsociety /workspace/

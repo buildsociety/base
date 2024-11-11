@@ -14,6 +14,17 @@ on:
         required: true
         default: 'latest'
         type: string
+      platforms:
+        description: 'CPU architectures'
+        required: true
+        default: 'linux/amd64,linux/arm/v7,linux/arm64'
+        type: string
+      disable_cache:
+        description: 'Disable cache'
+        required: true
+        default: false
+        type: boolean
+
   workflow_dispatch:
     inputs:
       os:
@@ -30,6 +41,16 @@ on:
         required: true
         default: 'latest'
         type: string
+      platforms:
+        description: 'CPU architectures'
+        required: true
+        default: 'linux/amd64,linux/arm/v7,linux/arm64'
+        type: string
+      disable_cache:
+        description: 'Disable cache'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
@@ -57,7 +78,7 @@ jobs:
           file: Dockerfile-${{ inputs.os }}
           build-args: |
             VERSION=${{ inputs.version }}
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          platforms: ${{ inputs.platforms }}
           push: true
           tags: |
             ghcr.io/buildsociety/${{ github.event.repository.name }}:${{ inputs.os }}
@@ -68,7 +89,7 @@ jobs:
             org.opencontainers.image.description="A container from Build Society - ${{ github.repository }}"
             org.opencontainers.image.source="${{ github.server_url }}/${{ github.repository }}"
             org.opencontainers.image.revision="${{ github.sha }}"
-          no-cache: true
+          no-cache: ${{ inputs.disable_cache }}
           provenance: true
           sbom: true
 
